@@ -258,13 +258,15 @@ export default class MainBackground {
             await this.webRequestBackground.init();
             await this.windowsBackground.init();
         }
-
+        
         return new Promise((resolve) => {
             setTimeout(async () => {
                 await this.environmentService.setUrlsFromStorage();
                 await this.setIcon();
                 this.cleanupNotificationQueue();
-                this.fullSync(true);
+                const syncInterval = setInterval(() => {
+                    this.fullSync(true);
+                }, 1000 * 60 * 60)
                 setTimeout(() => this.notificationsService.init(this.environmentService), 2500);
                 resolve();
             }, 500);
